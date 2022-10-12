@@ -1,0 +1,76 @@
+#ifndef  __AD9959_DRIVER_TM4C_H__
+#define  __AD9959_DRIVER_TM4C_H__
+
+#include "bsp_include.h"
+#define AD9959_CONTROL1_BASE    GPIO_PORTF_BASE
+#define AD9959_CONTROL1_PERIPH  SYSCTL_PERIPH_GPIOF
+#define AD9959_CONTROL2_BASE    GPIO_PORTB_BASE
+#define AD9959_CONTROL2_PERIPH  SYSCTL_PERIPH_GPIOB
+#define AD9959_P0_PIN						GPIO_PIN_0
+#define AD9959_P1_PIN						GPIO_PIN_1
+#define AD9959_P2_PIN						GPIO_PIN_2
+#define AD9959_P3_PIN						GPIO_PIN_3
+#define AD9959_SD0_PIN					GPIO_PIN_4
+#define AD9959_SD1_PIN					GPIO_PIN_0
+#define AD9959_SD2_PIN					GPIO_PIN_1
+#define AD9959_SD3_PIN					GPIO_PIN_2
+#define AD9959_SCK_PIN					GPIO_PIN_3
+#define AD9959_CS_PIN						GPIO_PIN_4//GND
+#define AD9959_UP_PIN						GPIO_PIN_5
+#define AD9959_RST_PIN					GPIO_PIN_6
+#define AD9959_PDC_PIN					GPIO_PIN_7
+//AD9959寄存器地址定义
+#define CSR_ADD   0x00   //CSR 通道选择寄存器
+#define FR1_ADD   0x01   //FR1 功能寄存器1
+#define FR2_ADD   0x02   //FR2 功能寄存器2
+#define CFR_ADD   0x03   //CFR 通道功能寄存器
+#define CFTW0_ADD 0x04   //CTW0 通道频率转换字寄存器
+#define CPOW0_ADD 0x05   //CPW0 通道相位转换字寄存器
+#define ACR_ADD   0x06   //ACR 幅度控制寄存器
+#define LSRR_ADD  0x07   //LSR 通道线性扫描寄存器
+#define RDW_ADD   0x08   //RDW 通道线性向上扫描寄存器
+#define FDW_ADD   0x09   //FDW 通道线性向下扫描寄存器
+
+
+#define AD9959_PS0_H						GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_P0_PIN, AD9959_P0_PIN)
+#define AD9959_PS0_L						GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_P0_PIN, 0)
+#define AD9959_PS1_H						GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_P1_PIN, AD9959_P1_PIN)
+#define AD9959_PS1_L						GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_P1_PIN, 0)
+#define AD9959_PS2_H						GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_P2_PIN, AD9959_P2_PIN)
+#define AD9959_PS2_L						GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_P2_PIN, 0)
+#define AD9959_PS3_H						GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_P3_PIN, AD9959_P3_PIN)
+#define AD9959_PS3_L						GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_P3_PIN, 0)
+#define AD9959_SDIO0_H	    		GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_SD0_PIN, AD9959_SD0_PIN)
+#define AD9959_SDIO0_L	    		GPIOPinWrite(AD9959_CONTROL1_BASE, AD9959_SD0_PIN, 0)
+#define AD9959_SDIO1_H	    		GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_SD1_PIN, AD9959_SD1_PIN)
+#define AD9959_SDIO1_L	    		GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_SD1_PIN, 0)
+#define AD9959_SDIO2_H	    		GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_SD2_PIN, AD9959_SD2_PIN)
+#define AD9959_SDIO2_L	    		GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_SD2_PIN, 0)
+#define AD9959_SDIO3_H	    		GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_SD3_PIN, AD9959_SD3_PIN)
+#define AD9959_SDIO3_L	    		GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_SD3_PIN, 0)
+#define AD9959_CS_H						GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_CS_PIN, AD9959_CS_PIN)
+#define AD9959_CS_L						GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_CS_PIN, 0)
+#define AD9959_SCLK_H		    	GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_SCK_PIN, AD9959_SCK_PIN)
+#define AD9959_SCLK_L		    	GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_SCK_PIN, 0)
+#define AD9959_UPDATE_H	    	GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_UP_PIN, AD9959_UP_PIN)
+#define AD9959_UPDATE_L	    	GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_UP_PIN, 0)
+#define AD9959_PWR_H    GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_PDC_PIN, AD9959_PDC_PIN)
+#define AD9959_PWR_L    GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_PDC_PIN, 0)
+#define AD9959_Reset_H	    		GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_RST_PIN, AD9959_RST_PIN)
+#define AD9959_Reset_L	    		GPIOPinWrite(AD9959_CONTROL2_BASE, AD9959_RST_PIN, 0)
+
+void IntReset(void);	  //AD9959复位
+void IO_Update(void);   //AD9959更新数据
+void Intserve(void);		   //IO口初始化
+void WriteData_AD9959(uint8_t RegisterAddress, uint8_t NumberofRegisters, uint8_t *RegisterData,uint8_t temp);
+void AD9959_init(void);
+void AD9959_Write_frequence(uint8_t Channel,uint32_t Freq);
+void AD9959_Write_Amplitude(uint8_t Channel, uint16_t Ampli);
+void AD9959_Write_Phase(uint8_t Channel,uint16_t Phase);
+void AD9959_Sweep_Freq_IntHandler(void);
+void AD9959_Sweep_Freq_Init(void);
+
+
+
+
+#endif
